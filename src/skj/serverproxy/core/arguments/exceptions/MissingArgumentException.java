@@ -5,6 +5,6 @@ package skj.serverproxy.core.arguments.exceptions;
  */
 public class MissingArgumentException extends Exception {
     public MissingArgumentException(String argName){
-        super("Required argument " + argName + " is missing. Check program parameters.");
+        super("Argument problem: " + argName + " Check program parameters.");
     }
 }

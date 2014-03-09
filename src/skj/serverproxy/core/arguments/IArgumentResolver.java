@@ -7,9 +7,9 @@ import skj.serverproxy.core.models.*;
  * Created by pwasiewicz on 09.03.14.
  */
 public interface IArgumentResolver {
-    void resolve(String... args)  throws MissingArgumentException;
+    void resolve(String... args) throws MissingArgumentException;
     int getPort();
-    String getWordsFilePath();
-    boolean shouldChache();
+    String getCacheDir();
+    boolean shouldCache();
     ServerMode getMode();
 }

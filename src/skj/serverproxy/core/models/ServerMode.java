@@ -5,5 +5,5 @@ package skj.serverproxy.core.models;
  */
 public enum ServerMode {
     LIGHT,
-    WEIGHT
+    HEAVY
 }
