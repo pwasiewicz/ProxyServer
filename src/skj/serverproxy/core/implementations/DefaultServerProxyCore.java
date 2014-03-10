@@ -50,7 +50,7 @@ public class DefaultServerProxyCore implements IServerProxyCore {
 
         ServerSocket serverSocket = this.produceServerSocket();
 
-        while (true){
+        while (true) {
             final Socket clientSocket = serverSocket.accept();
             this.handleClient(clientSocket);
         }
