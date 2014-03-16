@@ -20,10 +20,6 @@ public class ArgumentResolver implements IArgumentResolver {
 
     private int sslPort;
 
-    private String cacheDir;
-
-    private boolean cache;
-
     private ServerMode mode;
 
     @Override
@@ -39,12 +35,8 @@ public class ArgumentResolver implements IArgumentResolver {
 
         this.port = Integer.parseInt(args[0]);
         this.sslPort = Integer.parseInt(args[1]);
-        this.cacheDir = args[2];
-
-        this.cache = DEFAULT_CACHE;
         this.mode = DEFAULT_SERVER_MODE;
 
-        this.readCache(args);
         this.readServerMode(args);
     }
 
@@ -58,15 +50,6 @@ public class ArgumentResolver implements IArgumentResolver {
         return this.sslPort;
     }
 
-    @Override
-    public String getCacheDir() {
-        return this.cacheDir;
-    }
-
-    @Override
-    public boolean shouldCache() {
-        return this.cache;
-    }
 
     @Override
     public ServerMode getMode() {
@@ -76,12 +59,6 @@ public class ArgumentResolver implements IArgumentResolver {
     private void readServerMode(String[] args) {
         if (this.contains(args, LIGHT_MODE_ARG)){
             this.mode = ServerMode.LIGHT;
-        }
-    }
-
-    private void readCache(String[] args) {
-        if (this.contains(args, NOCACHE_ARG)){
-            this.cache = false;
         }
     }
 

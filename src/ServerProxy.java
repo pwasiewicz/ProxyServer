@@ -1,5 +1,6 @@
 import skj.serverproxy.core.DefaultServerProxyShell;
 import skj.serverproxy.core.IServerProxyCore;
+import skj.serverproxy.core.arguments.ArgumentResolver;
 import skj.serverproxy.core.arguments.exceptions.MissingArgumentException;
 
 import java.io.IOException;
@@ -14,7 +15,14 @@ public class ServerProxy {
 
         System.out.println("Starting server...");
 
-        IServerProxyCore server = DefaultServerProxyShell.initialize().onPort(13000).start();
+        ArgumentResolver argsResolver = new ArgumentResolver();
+        argsResolver.resolve(args);
+
+        IServerProxyCore server = DefaultServerProxyShell
+                                        .initialize()
+                                        .onPort(argsResolver.getPort())
+                                        .setMode(argsResolver.getMode())
+                                        .start();
 
         System.out.println("Server started. Press any key to exit.");
         System.in.read();
