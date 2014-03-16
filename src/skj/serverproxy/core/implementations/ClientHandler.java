@@ -2,6 +2,7 @@ package skj.serverproxy.core.implementations;
 
 
 import com.sun.java.swing.plaf.windows.resources.windows;
+import com.sun.jndi.toolkit.url.Uri;
 import skj.serverproxy.core.ISocketHandler;
 import skj.serverproxy.core.helpers.InputStreamHelper;
 
@@ -18,113 +19,164 @@ public class ClientHandler implements ISocketHandler {
     public void handle(Socket socket) throws IOException, URISyntaxException {
 
         /* CLIENT -> SERVER */
-        InputStream clientInput = socket.getInputStream();
+        final InputStream clientInput = socket.getInputStream();
+        final OutputStream clientWriter = socket.getOutputStream();
 
-        List<String> clientHeaders = new ArrayList<String>();
-
-        String line;
-        String targetUrl = null;
-
-        boolean firstLine = true;
-
-        while ((line = InputStreamHelper.readLine(clientInput)) != null) {
-
-            if (line.length() <= 0) {
-                break;
-            }
-
-            if (firstLine) {
-
-                String[] tokens = line.split(" ");
-                targetUrl = tokens[1];
-
-                line = tokens[0] + " " + this.extractPath(tokens[1]) + " " + tokens[2];
-
-                firstLine = false;
-            }
-
-            clientHeaders.add(line);
+        ProxyRequestHelper proxyRequest = new ProxyRequestHelper(clientInput);
+        if (!proxyRequest.parseHeaders()) {
+            return;
         }
 
+        Socket server = new Socket(proxyRequest.getHost(), 80);
 
-        Socket server = new Socket(this.extractHostName(targetUrl), 80);
-        PrintWriter serverPrint = new PrintWriter(server.getOutputStream());
+        final InputStream serverReader = server.getInputStream();
+        final OutputStream serverWriter = server.getOutputStream();
 
-        for (String header: clientHeaders) {
-            serverPrint.println(header);
+        proxyRequest.proxyTo(serverWriter);
+
+        byte[] buff = new byte[4096];
+        int bytesRead;
+
+        while ((bytesRead = serverReader.read(buff)) != -1) {
+            clientWriter.write(buff, 0, bytesRead);
+            clientWriter.flush();
         }
-
-        serverPrint.println("");
-        serverPrint.flush();
-
-        /* SERVER -> CLIENT */
-        /* Scanner serverScanner = new Scanner(server.getInputStream());
-        PrintWriter clientPrinter = new PrintWriter(socket.getOutputStream());
-
-        List<String> serverHeaders = new ArrayList<String>();
-        int serverContentLength = 0;
-
-        while ((line = serverScanner.nextLine()) != null) {
-
-            if (line.length() <= 0) {
-                break;
-            }
-
-            serverHeaders.add(line);
-
-            if (line.startsWith("Content-Length: ")) {
-                // content-length
-                int index = line.indexOf(':') + 1;
-                String len = line.substring(index).trim();
-                serverContentLength = Integer.parseInt(len);
-            }
-        }
-
-        for (String header: serverHeaders) {
-            clientPrinter.println(header);
-        }
-
-        clientPrinter.println("");
-        clientPrinter.flush(); */
-
-        // if (serverContentLength > 0) {
-
-            InputStream serverReader = server.getInputStream();
-            OutputStream clientWriter = socket.getOutputStream();
-
-            byte[] buff = new byte[1024];
-            int bytesRead;
-            // int count = 0;
-
-            while ((bytesRead = serverReader.read(buff)) != -1) {
-
-                //if (count == serverContentLength) {
-                    //break;
-                // }
-
-                clientWriter.write(buff, 0, bytesRead);
-                clientWriter.flush();
-                // count += bytesRead;
-            }
-
-            clientWriter.close();
-            serverReader.close();
-        // }
 
         clientInput.close();
+        clientWriter.close();
+        serverReader.close();
+        serverWriter.close();
     }
 
-    private String extractHostName(String proxyServerUrl) throws URISyntaxException {
+    private class ProxyRequestHelper {
 
-        URI uri = new URI(proxyServerUrl);
+        // finals
+        private final InputStream inputStream;
 
-        return uri.getHost();
-    }
+        // conn metadata
+        private List<String> rawHeaders;
 
-    private String extractPath(String proxyServerUrl) throws URISyntaxException {
+        private long contentLength;
 
-        URI uri = new URI(proxyServerUrl);
+        private String host;
 
-        return uri.getPath();
+        public ProxyRequestHelper(InputStream inputStream) {
+            this.inputStream = inputStream;
+        }
+
+        public boolean parseHeaders() {
+
+            this.rawHeaders = new ArrayList<String>();
+            this.contentLength = 0;
+
+            try{
+                String contractLine = InputStreamHelper.readLine(this.inputStream);
+                if (contractLine.length() == 0) {
+                    return false;
+                }
+
+                contractLine = this.handleContractLine(contractLine);
+                if (contractLine == null) {
+                    return false;
+                }
+
+                this.rawHeaders.add(contractLine);
+
+                String bufferLine;
+                while ((bufferLine = InputStreamHelper.readLine(this.inputStream)) != null) {
+                    if (bufferLine.length() == 0) {
+                        break;
+                    }
+
+                    this.rawHeaders.add(bufferLine);
+
+                    this.tryExtractContentLength(bufferLine);
+                }
+
+                return true;
+            }
+            catch (IOException ex) {
+                ex.printStackTrace();
+                return false;
+            }
+
+        }
+
+        public boolean proxyTo(OutputStream os) {
+            this.writeHeaders(os);
+            return this.writeBody(os);
+        }
+
+        public String getHost(){
+            return this.host;
+        }
+
+        private boolean writeBody(OutputStream os) {
+
+            if (this.contentLength == 0) {
+                return true;
+            }
+
+            int buffer;
+            long totalCount = 0;
+            try {
+                while ((buffer = inputStream.read()) != -1) {
+
+                    totalCount += 1;
+                    os.write(buffer);
+
+                    if (totalCount % 1024 == 0){
+                        os.flush();
+                    }
+                }
+                os.flush();
+                return  true;
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+
+
+        private void writeHeaders(OutputStream os) {
+
+            PrintWriter writer = new PrintWriter(os);
+
+            for (String header: this.rawHeaders){
+                writer.println(header);
+            }
+
+            writer.println("");
+            writer.flush();
+        }
+
+        private void tryExtractContentLength(String bufferLine) {
+
+            if (!bufferLine.startsWith("Content-Length:")) {
+                return;
+            }
+
+            int index = bufferLine.indexOf(":");
+
+            this.contentLength = Long.parseLong(bufferLine.substring(index + 1).trim());
+        }
+
+        private String handleContractLine(String contractLine) {
+
+            String[] tokens = contractLine.split(" ");
+
+            if (tokens.length != 3) {
+                return null;
+            }
+
+            URI uri = URI.create(tokens[1]);
+            this.host = uri.getHost();
+
+            String path = uri.getPath();
+
+
+            return tokens[0] + " " + path + " " + tokens[2];
+        }
+
     }
 }

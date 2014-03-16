@@ -11,6 +11,8 @@ public class InputStreamHelper {
     private static final int CR = 13;
     private static final int LF = 10;
 
+    private static final int MAX_HEADER_LENGTH = 32*1024;
+
     public static String readLine(InputStream stream) throws IOException {
 
         int ch;   // currently read char
@@ -20,6 +22,15 @@ public class InputStreamHelper {
         ch = stream.read();
         while(ch != CR && ch != LF)
         {
+            if (sb.length() >= MAX_HEADER_LENGTH) {
+                System.out.println("Too big header: " + sb.toString());
+                break;
+            }
+
+            /* if (ch < 0 || ch > 127) {
+                continue;
+            } */
+
             sb.append((char) ch);
             ch = stream.read();
         }
