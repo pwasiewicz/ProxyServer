@@ -12,10 +12,7 @@ import skj.serverproxy.core.arguments.exceptions.MissingArgumentException;
 import sun.plugin.dom.exception.InvalidStateException;
 
 import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.net.URISyntaxException;
+import java.net.*;
 
 /**
  * Created by pwasiewicz on 09.03.14.
@@ -26,15 +23,14 @@ public class DefaultServerProxyCore implements IServerProxyCore {
 
     private ServerProxyConfiguration configuration;
 
-    private boolean running;
-
     private Thread mainLoopThread;
+
+    private ServerSocket mainServerSocket;
 
     @Inject
     public DefaultServerProxyCore(
                     ISocketHandler httpHandler) {
         this.httpHandler = httpHandler;
-        this.running = false;
     }
 
     @Override
@@ -44,24 +40,30 @@ public class DefaultServerProxyCore implements IServerProxyCore {
             throw new RuntimeException("Server proxy is not configured.");
         }
 
-        this.running = true;
         this.runServerLoop();
     }
 
     @Override
     public void stop() {
-        if (!this.running) {
+        if (!this.isConfigured()) {
             throw new  RuntimeException("Cannot stop not running server.");
         }
 
         this.mainLoopThread.interrupt();
+
+        try {
+            this.mainServerSocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         this.mainLoopThread = null;
     }
 
     @Override
     public void setConfiguration(ServerProxyConfiguration serverProxyConfiguration) {
 
-        if (this.running) {
+        if (this.isConfigured()) {
             throw new RuntimeException("Cannot configure server while running.");
         }
 
@@ -70,13 +72,13 @@ public class DefaultServerProxyCore implements IServerProxyCore {
 
     private void runServerLoop() throws IOException {
 
+        final ServerSocket server = procduceServerSocket();
+
         this.mainLoopThread = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    final ServerSocket server = procduceServerSocket();
-
-                    while (running) {
+                    while (!Thread.currentThread().isInterrupted()) {
 
                         final Socket clientSocket = server.accept();
 
@@ -95,13 +97,17 @@ public class DefaultServerProxyCore implements IServerProxyCore {
                             }
                         }).start();
                     }
-                } catch (IOException e) {
+                } catch (SocketException e) {
+                    // TODO: log;
+                }
+                catch (IOException e) {
                     // TODO: log
                     e.printStackTrace();
                 }
             }
         });
 
+        this.mainServerSocket = server;
         this.mainLoopThread.start();
     }
 
@@ -112,5 +118,9 @@ public class DefaultServerProxyCore implements IServerProxyCore {
 
     private boolean isConfigured() {
         return this.configuration != null;
+    }
+
+    private boolean isRunning() {
+        return this.mainLoopThread != null;
     }
 }
