@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7971d3dd-f9f4-4557-a19c-92c7b31ada90" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/skj/serverproxy/core/implementations/DefaultServerProxyCore.java" afterPath="$PROJECT_DIR$/src/skj/serverproxy/core/implementations/DefaultServerProxyCore.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/skj/serverproxy/core/implementations/RequestProxyBase.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/skj/serverproxy/core/implementations/ClientHandler.java" afterPath="$PROJECT_DIR$/src/skj/serverproxy/core/implementations/ClientHandler.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="SKJ_ServerProxy.iws" />
@@ -68,11 +69,31 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="ClientHandler.java" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="ClientHandler.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/skj/serverproxy/core/implementations/ClientHandler.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="162" column="0" selection-start="4373" selection-end="4373" vertical-scroll-proportion="0.0" vertical-offset="1890" max-vertical-offset="3204">
+            <state line="122" column="0" selection-start="3333" selection-end="3333" vertical-scroll-proportion="2.4202402" vertical-offset="587" max-vertical-offset="2304">
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="DefaultServerProxyCore.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/skj/serverproxy/core/implementations/DefaultServerProxyCore.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="89" column="31" selection-start="2572" selection-end="2572" vertical-scroll-proportion="0.0" vertical-offset="870" max-vertical-offset="2052">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="RequestProxyBase.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/skj/serverproxy/core/implementations/RequestProxyBase.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="35" column="5" selection-start="861" selection-end="861" vertical-scroll-proportion="0.0" vertical-offset="101" max-vertical-offset="1674">
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -86,28 +107,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="DefaultServerProxyCore.java" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/skj/serverproxy/core/implementations/DefaultServerProxyCore.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="89" column="31" selection-start="2572" selection-end="2572" vertical-scroll-proportion="0.47512865" vertical-offset="1037" max-vertical-offset="2052">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="Thread.java" pinned="false" current="false" current-in-tab="false">
         <entry file="jar:///usr/lib/jvm/java-7-oracle/src.zip!/java/lang/Thread.java">
           <provider selected="true" editor-type-id="text-editor">
             <state line="721" column="0" selection-start="26865" selection-end="26865" vertical-scroll-proportion="0.0" vertical-offset="12978" max-vertical-offset="36756">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ISocketHandler.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/skj/serverproxy/core/ISocketHandler.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="10" column="70" selection-start="270" selection-end="270" vertical-scroll-proportion="0.0" vertical-offset="180" max-vertical-offset="324">
               <folding />
             </state>
           </provider>
@@ -152,7 +155,7 @@
       <file leaf-file-name="ServerProxyConfiguration.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/skj/serverproxy/core/implementations/ServerProxyConfiguration.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="44" column="36" selection-start="1152" selection-end="1152" vertical-scroll-proportion="0.0" vertical-offset="792" max-vertical-offset="954">
+            <state line="44" column="36" selection-start="1152" selection-end="1152" vertical-scroll-proportion="0.0" vertical-offset="270" max-vertical-offset="900">
               <folding />
             </state>
           </provider>
@@ -203,8 +206,9 @@
         <option value="$PROJECT_DIR$/src/skj/serverproxy/core/IServerProxyCore.java" />
         <option value="$PROJECT_DIR$/src/ServerProxy.java" />
         <option value="$PROJECT_DIR$/src/skj/serverproxy/core/helpers/InputStreamHelper.java" />
-        <option value="$PROJECT_DIR$/src/skj/serverproxy/core/implementations/ClientHandler.java" />
         <option value="$PROJECT_DIR$/src/skj/serverproxy/core/implementations/DefaultServerProxyCore.java" />
+        <option value="$PROJECT_DIR$/src/skj/serverproxy/core/implementations/ClientHandler.java" />
+        <option value="$PROJECT_DIR$/src/skj/serverproxy/core/implementations/RequestProxyBase.java" />
       </list>
     </option>
   </component>
@@ -572,7 +576,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="29" width="1920" height="1051" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -591,7 +595,7 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2603834" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32765958" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32765958" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3287234" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -624,13 +628,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/skj/serverproxy/core/DefaultServerProxyShell.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="27" column="5" selection-start="838" selection-end="838" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="630">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/skj/serverproxy/core/implementations/DefaultServerProxyCore.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="21" column="0" selection-start="644" selection-end="644" vertical-scroll-proportion="0.0" vertical-offset="264" max-vertical-offset="630">
@@ -759,7 +756,9 @@
     </entry>
     <entry file="jar:///usr/lib/jvm/java-7-oracle/src.zip!/java/net/Socket.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="115" column="11" selection-start="3203" selection-end="3203" vertical-scroll-proportion="-9.372549" vertical-offset="7266" max-vertical-offset="29250" />
+        <state line="115" column="11" selection-start="3203" selection-end="3203" vertical-scroll-proportion="-9.372549" vertical-offset="7266" max-vertical-offset="29250">
+          <folding />
+        </state>
       </provider>
     </entry>
     <entry file="jar:///usr/lib/jvm/java-7-oracle/jre/lib/rt.jar!/com/sun/net/httpserver/HttpServer.class">
@@ -830,27 +829,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/skj/serverproxy/core/IServerProxyCore.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="16" selection-start="339" selection-end="339" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="324">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/skj/serverproxy/core/implementations/ServerProxyConfiguration.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="44" column="36" selection-start="1152" selection-end="1152" vertical-scroll-proportion="0.0" vertical-offset="244" max-vertical-offset="918">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/skj/serverproxy/core/DefaultServerProxyShell.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="30" column="44" selection-start="1170" selection-end="1170" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="810">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar:///usr/lib/jvm/java-7-oracle/src.zip!/java/io/BufferedInputStream.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="253" column="0" selection-start="8847" selection-end="8847" vertical-scroll-proportion="0.0" vertical-offset="3939" max-vertical-offset="8298">
@@ -893,16 +871,23 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/skj/serverproxy/core/implementations/ClientHandler.java">
+    <entry file="jar:///usr/lib/jvm/java-7-oracle/src.zip!/java/net/ServerSocket.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="162" column="0" selection-start="4373" selection-end="4373" vertical-scroll-proportion="0.0" vertical-offset="1890" max-vertical-offset="3204">
+        <state line="483" column="18" selection-start="18462" selection-end="18462" vertical-scroll-proportion="0.75587904" vertical-offset="7497" max-vertical-offset="15534">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="jar:///usr/lib/jvm/java-7-oracle/src.zip!/java/net/ServerSocket.java">
+    <entry file="file://$PROJECT_DIR$/src/skj/serverproxy/core/DefaultServerProxyShell.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="483" column="18" selection-start="18462" selection-end="18462" vertical-scroll-proportion="0.75587904" vertical-offset="7497" max-vertical-offset="15534">
+        <state line="30" column="44" selection-start="1170" selection-end="1170" vertical-scroll-proportion="0.49399656" vertical-offset="0" max-vertical-offset="810">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/skj/serverproxy/core/IServerProxyCore.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="12" column="16" selection-start="339" selection-end="339" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="324">
           <folding />
         </state>
       </provider>
@@ -914,9 +899,32 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/skj/serverproxy/core/implementations/ServerProxyConfiguration.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="44" column="36" selection-start="1152" selection-end="1152" vertical-scroll-proportion="0.0" vertical-offset="244" max-vertical-offset="918">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/skj/serverproxy/core/implementations/DefaultServerProxyCore.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="89" column="31" selection-start="2572" selection-end="2572" vertical-scroll-proportion="0.47512865" vertical-offset="1037" max-vertical-offset="2052">
+        <state line="89" column="31" selection-start="2572" selection-end="2572" vertical-scroll-proportion="0.0" vertical-offset="870" max-vertical-offset="2052">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/skj/serverproxy/core/implementations/RequestProxyBase.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="35" column="5" selection-start="861" selection-end="861" vertical-scroll-proportion="0.0" vertical-offset="101" max-vertical-offset="1674">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/skj/serverproxy/core/implementations/ClientHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="122" column="0" selection-start="3333" selection-end="3333" vertical-scroll-proportion="2.4202402" vertical-offset="587" max-vertical-offset="2304">
           <folding />
         </state>
       </provider>
