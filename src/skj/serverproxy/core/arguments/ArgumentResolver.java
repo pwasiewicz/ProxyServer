@@ -18,6 +18,8 @@ public class ArgumentResolver implements IArgumentResolver {
 
     private int port;
 
+    private int sslPort;
+
     private String cacheDir;
 
     private boolean cache;
@@ -31,12 +33,13 @@ public class ArgumentResolver implements IArgumentResolver {
             throw new IllegalArgumentException("Program args cannot be null.");
         }
 
-        if (args.length < 2){
+        if (args.length < 3){
             throw new MissingArgumentException("At least two arguments must be provided: port and cache folder.");
         }
 
         this.port = Integer.parseInt(args[0]);
-        this.cacheDir = args[1];
+        this.sslPort = Integer.parseInt(args[1]);
+        this.cacheDir = args[2];
 
         this.cache = DEFAULT_CACHE;
         this.mode = DEFAULT_SERVER_MODE;
@@ -48,6 +51,11 @@ public class ArgumentResolver implements IArgumentResolver {
     @Override
     public int getPort() {
         return this.port;
+    }
+
+    @Override
+    public int getSSLPort() {
+        return this.sslPort;
     }
 
     @Override

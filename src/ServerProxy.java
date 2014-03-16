@@ -11,9 +11,6 @@ import java.io.IOException;
 public class ServerProxy {
 
     public static void main(String... args) throws MissingArgumentException, IOException {
-        IServerProxyCore proxyCore = DefaultServerProxyShell.initialize();
-
-        proxyCore.resolveArgs(args);
-        proxyCore.run();
+        DefaultServerProxyShell.initialize().onPort(13000).start();
     }
 }

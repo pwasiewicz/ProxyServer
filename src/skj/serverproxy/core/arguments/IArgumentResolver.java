@@ -9,6 +9,7 @@ import skj.serverproxy.core.models.*;
 public interface IArgumentResolver {
     void resolve(String... args) throws MissingArgumentException;
     int getPort();
+    int getSSLPort();
     String getCacheDir();
     boolean shouldCache();
     ServerMode getMode();

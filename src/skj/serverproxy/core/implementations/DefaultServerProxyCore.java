@@ -1,78 +1,90 @@
 package skj.serverproxy.core.implementations;
 
 import com.google.inject.Inject;
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
+import com.sun.net.httpserver.HttpServer;
+import com.sun.net.httpserver.HttpsServer;
 import skj.serverproxy.core.IServerProxyCore;
+import skj.serverproxy.core.ISocketHandler;
 import skj.serverproxy.core.arguments.IArgumentResolver;
 import skj.serverproxy.core.arguments.exceptions.MissingArgumentException;
-import skj.serverproxy.core.proxy.IClientProxy;
-import skj.serverproxy.core.proxy.IClientProxyFactory;
 import sun.plugin.dom.exception.InvalidStateException;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.URISyntaxException;
 
 /**
  * Created by pwasiewicz on 09.03.14.
  */
 public class DefaultServerProxyCore implements IServerProxyCore {
 
-    private final IArgumentResolver argsResolver;
+    private final ISocketHandler httpHandler;
 
-    private final IClientProxyFactory clientThreadFactory;
+    private ServerProxyConfiguration configuration;
 
-    private boolean areArgsResolved = false;
+    private boolean running;
 
     @Inject
     public DefaultServerProxyCore(
-                    IArgumentResolver argsResolver,
-                    IClientProxyFactory clientThreadFactory) {
-        this.argsResolver = argsResolver;
-        this.clientThreadFactory = clientThreadFactory;
-    }
-
-    @Override
-    public void resolveArgs(String... args) throws MissingArgumentException {
-        this.argsResolver.resolve(args);
-        this.areArgsResolved = true;
+                    ISocketHandler httpHandler) {
+        this.httpHandler = httpHandler;
+        this.running = false;
     }
 
     @Override
     public void run() throws IOException {
-        if (!this.areArgsResolved){
-            throw new InvalidStateException("Arguments are not resolved.");
+
+        if (!this.isConfigured()) {
+            throw new RuntimeException("Server proxy is not configured.");
         }
 
+        this.running = true;
         this.runServerLoop();
+    }
+
+    @Override
+    public void setConfiguration(ServerProxyConfiguration serverProxyConfiguration) {
+
+        if (this.running) {
+            throw new RuntimeException("Cannot configure server while running.");
+        }
+
+        this.configuration = serverProxyConfiguration;
     }
 
     private void runServerLoop() throws IOException {
 
-        ServerSocket serverSocket = this.produceServerSocket();
+        ServerSocket server = this.procduceServerSocket();
 
-        while (true) {
-            final Socket clientSocket = serverSocket.accept();
-            this.handleClient(clientSocket);
+        while (this.running) {
+
+            final Socket clientSocket = server.accept();
+
+            new Thread(new Runnable() {
+                @Override
+               public void run() {
+                    try{
+                        httpHandler.handle(clientSocket);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (URISyntaxException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
         }
     }
 
-    private void handleClient(final Socket client) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                IClientProxy clientThread = clientThreadFactory.newClientProxy();
+    private ServerSocket procduceServerSocket() throws IOException {
+        return new ServerSocket(13000);
 
-                try{
-                    clientThread.proxyConnection(client);
-                } catch (IOException e){
-                    // TODO handle exception
-                    e.printStackTrace();
-                }
-            }
-        }).run();
     }
 
-    private ServerSocket produceServerSocket() throws IOException {
-        return new ServerSocket(this.argsResolver.getPort());
+    private boolean isConfigured() {
+        return this.configuration != null;
     }
 }
