@@ -28,6 +28,8 @@ public class DefaultServerProxyCore implements IServerProxyCore {
 
     private boolean running;
 
+    private Thread mainLoopThread;
+
     @Inject
     public DefaultServerProxyCore(
                     ISocketHandler httpHandler) {
@@ -47,6 +49,16 @@ public class DefaultServerProxyCore implements IServerProxyCore {
     }
 
     @Override
+    public void stop() {
+        if (!this.running) {
+            throw new  RuntimeException("Cannot stop not running server.");
+        }
+
+        this.mainLoopThread.interrupt();
+        this.mainLoopThread = null;
+    }
+
+    @Override
     public void setConfiguration(ServerProxyConfiguration serverProxyConfiguration) {
 
         if (this.running) {
@@ -58,25 +70,39 @@ public class DefaultServerProxyCore implements IServerProxyCore {
 
     private void runServerLoop() throws IOException {
 
-        ServerSocket server = this.procduceServerSocket();
+        this.mainLoopThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    final ServerSocket server = procduceServerSocket();
 
-        while (this.running) {
+                    while (running) {
 
-            final Socket clientSocket = server.accept();
+                        final Socket clientSocket = server.accept();
 
-            new Thread(new Runnable() {
-                @Override
-               public void run() {
-                    try{
-                        httpHandler.handle(clientSocket);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (URISyntaxException e) {
-                        e.printStackTrace();
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try{
+                                    httpHandler.handle(clientSocket);
+                                } catch (IOException e) {
+                                    // TODO: log
+                                    e.printStackTrace();
+                                } catch (URISyntaxException e) {
+                                    // TODO: log
+                                    e.printStackTrace();
+                                }
+                            }
+                        }).start();
                     }
+                } catch (IOException e) {
+                    // TODO: log
+                    e.printStackTrace();
                 }
-            }).start();
-        }
+            }
+        });
+
+        this.mainLoopThread.start();
     }
 
     private ServerSocket procduceServerSocket() throws IOException {
