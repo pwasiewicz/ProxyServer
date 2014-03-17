@@ -27,10 +27,6 @@ public class InputStreamHelper {
                 break;
             }
 
-            /* if (ch < 0 || ch > 127) {
-                continue;
-            } */
-
             sb.append((char) ch);
             ch = stream.read();
         }

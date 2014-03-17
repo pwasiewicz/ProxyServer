@@ -9,10 +9,12 @@ import skj.serverproxy.core.IServerProxyCore;
 import skj.serverproxy.core.ISocketHandler;
 import skj.serverproxy.core.arguments.IArgumentResolver;
 import skj.serverproxy.core.arguments.exceptions.MissingArgumentException;
+import skj.serverproxy.core.logger.NullLogger;
 import sun.plugin.dom.exception.InvalidStateException;
 
 import java.io.IOException;
 import java.net.*;
+import java.util.logging.Logger;
 
 /**
  * Created by pwasiewicz on 09.03.14.
@@ -27,25 +29,33 @@ public class DefaultServerProxyCore implements IServerProxyCore {
 
     private ServerSocket mainServerSocket;
 
+    public Logger logger;
+
     @Inject
     public DefaultServerProxyCore(
                     ISocketHandler httpHandler) {
         this.httpHandler = httpHandler;
+        this.logger = NullLogger.instance();
     }
 
     @Override
     public void run() throws IOException {
 
+        this.logger.info("Running proxy server...");
+
         if (!this.isConfigured()) {
+            this.logger.severe("Server not configured.");
             throw new RuntimeException("Server proxy is not configured.");
         }
 
         this.runServerLoop();
+        this.logger.info("Proxy server run properly.");
     }
 
     @Override
     public void stop() {
-        if (!this.isConfigured()) {
+        if (!this.isRunning()) {
+            this.logger.severe("Cannot stop server that is not running.");
             throw new  RuntimeException("Cannot stop not running server.");
         }
 
@@ -54,7 +64,7 @@ public class DefaultServerProxyCore implements IServerProxyCore {
         try {
             this.mainServerSocket.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            this.logger.severe("An error occurred while stopping server: " + e.getMessage());
         }
 
         this.mainLoopThread = null;
@@ -63,11 +73,20 @@ public class DefaultServerProxyCore implements IServerProxyCore {
     @Override
     public void setConfiguration(ServerProxyConfiguration serverProxyConfiguration) {
 
-        if (this.isConfigured()) {
+        if (this.isRunning()) {
+            this.logger.severe("Trying to set server configuration while running.");
             throw new RuntimeException("Cannot configure server while running.");
         }
 
         this.configuration = serverProxyConfiguration;
+
+        this.httpHandler.setRequestFilters(this.configuration.getRequestFilter());
+        this.httpHandler.setResponseFilters(this.configuration.getResponeFilter());
+    }
+
+    @Override
+    public boolean isRunning() {
+        return this.mainLoopThread != null;
     }
 
     private void runServerLoop() throws IOException {
@@ -80,12 +99,15 @@ public class DefaultServerProxyCore implements IServerProxyCore {
                 try {
                     while (!Thread.currentThread().isInterrupted()) {
 
+                        logger.info("Waiting for request.");
                         final Socket clientSocket = server.accept();
+                        logger.info("Received request.");
 
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
                                 try{
+                                    logger.info("Handling request in thread " + Thread.currentThread().getId());
                                     httpHandler.handle(clientSocket);
                                 } catch (IOException e) {
                                     // TODO: log
@@ -107,8 +129,12 @@ public class DefaultServerProxyCore implements IServerProxyCore {
             }
         });
 
+        this.logger.info("Running main server loop.");
+
         this.mainServerSocket = server;
         this.mainLoopThread.start();
+
+        this.logger.info("Main server loop run.");
     }
 
     private ServerSocket procduceServerSocket() throws IOException {
@@ -118,9 +144,5 @@ public class DefaultServerProxyCore implements IServerProxyCore {
 
     private boolean isConfigured() {
         return this.configuration != null;
-    }
-
-    private boolean isRunning() {
-        return this.mainLoopThread != null;
     }
 }

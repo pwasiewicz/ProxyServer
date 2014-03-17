@@ -10,10 +10,6 @@ public class ArgumentResolver implements IArgumentResolver {
 
     private final String LIGHT_MODE_ARG = "--LIGHT";
 
-    private final String NOCACHE_ARG = "--NO_CACHE";
-
-    private final boolean DEFAULT_CACHE = true;
-
     private final ServerMode DEFAULT_SERVER_MODE = ServerMode.HEAVY;
 
     private int port;
@@ -30,7 +26,7 @@ public class ArgumentResolver implements IArgumentResolver {
         }
 
         if (args.length < 3){
-            throw new MissingArgumentException("At least two arguments must be provided: port and cache folder.");
+            throw new MissingArgumentException("At least two arguments must be provided: port and ssl port");
         }
 
         this.port = Integer.parseInt(args[0]);

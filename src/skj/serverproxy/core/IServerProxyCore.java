@@ -11,5 +11,6 @@ import java.io.IOException;
 public interface IServerProxyCore {
     void run() throws IOException;
     void stop();
+    boolean isRunning();
     void setConfiguration(ServerProxyConfiguration serverProxyConfiguration);
 }
