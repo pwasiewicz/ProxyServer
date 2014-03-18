@@ -5,10 +5,10 @@ import java.util.*;
 /**
  * Created by pwasiewicz on 17.03.14.
  */
-public class HeaderValuesCollection {
+public class HeadersValuesCollection {
     private HashMap<String, List<String>> headers;
 
-    public HeaderValuesCollection() {
+    public HeadersValuesCollection() {
         this.headers = new HashMap<String, List<String>>();
     }
 
