@@ -1,7 +1,8 @@
 package skj.serverproxy.core.implementations.base;
 
-import skj.serverproxy.core.collections.HeaderValuesCollection;
+import skj.serverproxy.core.collections.HeadersValuesCollection;
 import skj.serverproxy.core.exceptions.InvalidHeaderException;
+import skj.serverproxy.core.filters.AbstractFilter;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,12 +17,15 @@ import java.util.List;
 public abstract class RequestProxyBase {
 
     // finals
-    protected final InputStream inputStream;
+    protected InputStream inputStream;
+
+    protected final List<? extends AbstractFilter> filters;
 
     protected List<String> rawHeaders;
 
-    protected RequestProxyBase(InputStream inputStream) {
+    protected RequestProxyBase(InputStream inputStream, List<? extends AbstractFilter> filters) {
         this.inputStream = inputStream;
+        this.filters = filters;
     }
 
 
@@ -39,7 +43,7 @@ public abstract class RequestProxyBase {
     public long getContentLength () {
 
         try {
-            HeaderValuesCollection headers = this.getHeaders();
+            HeadersValuesCollection headers = this.getHeaders();
             if (!headers.containsKey("Content-Length")) {
                 return 0;
             }
@@ -54,46 +58,76 @@ public abstract class RequestProxyBase {
         }
     }
 
-    public String getContentType() {
-        try {
-            HeaderValuesCollection headers = this.getHeaders();
-            if (!headers.containsKey("Content-Type")) {
-                return null;
-            }
+    public HeadersValuesCollection getHeaders() throws InvalidHeaderException {
+        HeadersValuesCollection output = new HeadersValuesCollection();
 
-            String value = headers.getValues("Content-Type").get(0);
-
-            return value.trim();
-
-        } catch (InvalidHeaderException e) {
-            e.printStackTrace();
-            return null;
+        if (this.rawHeaders.size() < 2) {
+            return output;
         }
-    }
 
-    public HeaderValuesCollection getHeaders() throws InvalidHeaderException {
-        HeaderValuesCollection output = new HeaderValuesCollection();
+        List<String> onlyHeaders = this.rawHeaders.subList(1, this.rawHeaders.size());
 
-        for (String header: this.rawHeaders) {
+        for (String header: onlyHeaders) {
             String key = this.getHeaderKey(header);
             if (key == null) {
                 throw new InvalidHeaderException();
             }
 
             String value = this.getHeaderValue(key, header);
+            if (value == null) {
+                continue;
+            }
+
             output.put(key, value.trim());
         }
 
         return output;
     }
 
-    public final void overrideHeaders(HeaderValuesCollection newHeaders) {
+    public final void applyFilters() throws InvalidHeaderException {
+
+        if (this.filters == null) {
+            return;
+        }
+
+        final HttpData httpData = new HttpData(
+                                this.getContract(),
+                                this.getHeaders(),
+                                this.inputStream);
+
+        for (AbstractFilter filter: this.filters) {
+            filter.filterRequest(httpData);
+        }
+
+        this.overrideHeaders(httpData.getContract(), httpData.getHeaders());
+        this.overrideInputStream(httpData.getBody());
+    }
+
+    private String getContract() {
+
+        if (this.rawHeaders.size() < 1) {
+            return null;
+        }
+
+        return this.rawHeaders.get(0);
+    }
+
+    protected final void overrideInputStream(InputStream stream) {
+        this.inputStream = stream;
+    }
+
+    protected final void overrideHeaders(String contract, HeadersValuesCollection newHeaders) {
 
         if (newHeaders == null) {
             throw new IllegalArgumentException("New headers cannot be null.");
         }
 
+        if (contract == null) {
+            throw new IllegalArgumentException("New contract cannot be null.");
+        }
+
         this.rawHeaders = new ArrayList<String>();
+        this.rawHeaders.add(contract);
 
         for (String key: newHeaders.keys()) {
             List<String> values = newHeaders.getValues(key);
@@ -159,10 +193,10 @@ public abstract class RequestProxyBase {
         assert rawHeader.length() > 0;
 
         int index = rawHeader.indexOf(":");
-        if (index < 1) {
+        if (index < 0) {
             return null;
         }
 
-        return rawHeader.substring(0, index -1);
+        return rawHeader.substring(0, index);
     }
 }

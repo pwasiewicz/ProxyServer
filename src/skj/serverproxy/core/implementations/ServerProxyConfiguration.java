@@ -18,8 +18,6 @@ public class ServerProxyConfiguration implements IServerProxyConfiguration {
 
     private  int sslPort = 13001;
 
-    private ServerMode serverMode = ServerMode.HEAVY;
-
     private List<AbstractResponseFilter> responseFilterList;
 
     private List<AbstractRequestFilter> requestFilterList;
@@ -41,12 +39,6 @@ public class ServerProxyConfiguration implements IServerProxyConfiguration {
     public IServerProxyConfiguration onSSLPort(int port) {
         this.sslPort = port;
         return  this;
-    }
-
-    @Override
-    public IServerProxyConfiguration setMode(ServerMode mode) {
-        this.serverMode = mode;
-        return this;
     }
 
     @Override
@@ -96,9 +88,5 @@ public class ServerProxyConfiguration implements IServerProxyConfiguration {
 
     public int getSSLPort() {
         return this.sslPort;
-    }
-
-    public ServerMode getServerMode() {
-        return this.serverMode;
     }
 }

@@ -1,7 +1,10 @@
 import skj.serverproxy.core.DefaultServerProxyShell;
+import skj.serverproxy.core.IServerProxyConfiguration;
 import skj.serverproxy.core.IServerProxyCore;
 import skj.serverproxy.core.arguments.ArgumentResolver;
 import skj.serverproxy.core.arguments.exceptions.MissingArgumentException;
+import skj.serverproxy.core.filters.defaultFilters.TextResponseOnlyFilter;
+import skj.serverproxy.core.models.ServerMode;
 
 import java.io.IOException;
 
@@ -18,11 +21,15 @@ public class ServerProxy {
         ArgumentResolver argsResolver = new ArgumentResolver();
         argsResolver.resolve(args);
 
-        IServerProxyCore server = DefaultServerProxyShell
+        IServerProxyConfiguration configuration = DefaultServerProxyShell
                                         .initialize()
-                                        .onPort(argsResolver.getPort())
-                                        .setMode(argsResolver.getMode())
-                                        .start();
+                                        .onPort(argsResolver.getPort());
+
+        if (argsResolver.getMode() == ServerMode.LIGHT) {
+             configuration.registerResponseFilter(new TextResponseOnlyFilter());
+        }
+
+        IServerProxyCore server = configuration.start();
 
         System.out.println("Server started. Press any key to exit.");
         System.in.read();

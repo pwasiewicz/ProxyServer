@@ -109,21 +109,25 @@ public class DefaultServerProxyCore implements IServerProxyCore {
                                 try{
                                     logger.info("Handling request in thread " + Thread.currentThread().getId());
                                     httpHandler.handle(clientSocket);
+                                    logger.info("Exiting client's thread.");
                                 } catch (IOException e) {
-                                    // TODO: log
+                                    logger.severe(String.format("Thread %d: Error while handling client's request: %s",
+                                                                    Thread.currentThread().getId(),
+                                                                    e.getMessage()));
                                     e.printStackTrace();
                                 } catch (URISyntaxException e) {
-                                    // TODO: log
+                                    logger.severe("Error while handling client's request: Bad target url.");
                                     e.printStackTrace();
                                 }
                             }
                         }).start();
                     }
                 } catch (SocketException e) {
-                    // TODO: log;
+                    logger.severe("Error while waiting for client's request: " + e.getMessage());
+                    e.printStackTrace();
                 }
                 catch (IOException e) {
-                    // TODO: log
+                    logger.severe("Error while reading client's request data: " + e.getMessage());
                     e.printStackTrace();
                 }
             }
@@ -138,7 +142,7 @@ public class DefaultServerProxyCore implements IServerProxyCore {
     }
 
     private ServerSocket procduceServerSocket() throws IOException {
-        return new ServerSocket(13000);
+        return new ServerSocket(this.configuration.getPort());
 
     }
 
