@@ -60,7 +60,7 @@ public class ArgumentResolver implements IArgumentResolver {
 
     private boolean contains(String[] args, String element){
         for (String arrayElement : args){
-            if (arrayElement == element){
+            if (arrayElement.equals(element)){
                 return true;
             }
         }

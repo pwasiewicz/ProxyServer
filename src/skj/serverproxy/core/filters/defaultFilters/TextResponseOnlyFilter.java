@@ -25,6 +25,8 @@ public class TextResponseOnlyFilter extends AbstractResponseFilter {
         this.acceptedContentTypes.add("application/json");
         this.acceptedContentTypes.add("application/csv");
         this.acceptedContentTypes.add("application/xml");
+        this.acceptedContentTypes.add("application/javascript");
+        this.acceptedContentTypes.add("text/javascript");
     }
 
     @Override
@@ -65,7 +67,7 @@ public class TextResponseOnlyFilter extends AbstractResponseFilter {
     }
 
     private boolean isAcceptedContentType(HeadersValuesCollection header) {
-         final String contentTypeKey = "Content-Type";
+         final String contentTypeKey = "content-type";
 
         if (!header.containsKey(contentTypeKey)) {
             return false;

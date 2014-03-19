@@ -44,11 +44,11 @@ public abstract class RequestProxyBase {
 
         try {
             HeadersValuesCollection headers = this.getHeaders();
-            if (!headers.containsKey("Content-Length")) {
+            if (!headers.containsKey("content-length")) {
                 return 0;
             }
 
-            String value = headers.getValues("Content-Length").get(0);
+            String value = headers.getValues("content-length").get(0);
 
             return Long.parseLong(value);
 
@@ -78,7 +78,7 @@ public abstract class RequestProxyBase {
                 continue;
             }
 
-            output.put(key, value.trim());
+            output.put(key.toLowerCase(), value.trim());
         }
 
         return output;

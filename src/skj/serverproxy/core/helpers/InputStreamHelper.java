@@ -1,5 +1,7 @@
 package skj.serverproxy.core.helpers;
 
+import skj.serverproxy.core.exceptions.InvalidHeaderException;
+
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -11,9 +13,9 @@ public class InputStreamHelper {
     private static final int CR = 13;
     private static final int LF = 10;
 
-    private static final int MAX_HEADER_LENGTH = 32*1024;
+    private static final int MAX_HEADER_LENGTH = 16*1024;
 
-    public static String readLine(InputStream stream) throws IOException {
+    public static String readLine(InputStream stream) throws IOException, InvalidHeaderException {
 
         int ch;   // currently read char
 
@@ -24,7 +26,7 @@ public class InputStreamHelper {
         {
             if (sb.length() >= MAX_HEADER_LENGTH) {
                 System.out.println("Too big header: " + sb.toString());
-                break;
+                throw new InvalidHeaderException();
             }
 
             sb.append((char) ch);

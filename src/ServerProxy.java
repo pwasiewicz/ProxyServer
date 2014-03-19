@@ -3,6 +3,7 @@ import skj.serverproxy.core.IServerProxyConfiguration;
 import skj.serverproxy.core.IServerProxyCore;
 import skj.serverproxy.core.arguments.ArgumentResolver;
 import skj.serverproxy.core.arguments.exceptions.MissingArgumentException;
+import skj.serverproxy.core.filters.defaultFilters.ConnectionCloseFilter;
 import skj.serverproxy.core.filters.defaultFilters.TextResponseOnlyFilter;
 import skj.serverproxy.core.models.ServerMode;
 
@@ -28,6 +29,8 @@ public class ServerProxy {
         if (argsResolver.getMode() == ServerMode.LIGHT) {
              configuration.registerResponseFilter(new TextResponseOnlyFilter());
         }
+
+        configuration.registerResponseFilter(new ConnectionCloseFilter());
 
         IServerProxyCore server = configuration.start();
 

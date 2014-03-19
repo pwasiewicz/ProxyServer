@@ -100,7 +100,7 @@ public class ClientHandler implements ISocketHandler {
         }
 
         try {
-            proxyRequest.applyFilters();
+            proxyServerResponse.applyFilters();
         } catch (InvalidHeaderException e) {
             this.logger.severe(this.attachThreadId("Error while applying filters to server response: " + e.getMessage()));
             e.printStackTrace();
@@ -180,6 +180,9 @@ public class ClientHandler implements ISocketHandler {
             } catch (IOException e) {
                 e.printStackTrace();
                 return false;
+            } catch (InvalidHeaderException e) {
+                e.printStackTrace();
+                return false;
             }
 
             return true;
@@ -229,6 +232,9 @@ public class ClientHandler implements ISocketHandler {
             }
             catch (IOException ex) {
                 ex.printStackTrace();
+                return false;
+            } catch (InvalidHeaderException e) {
+                e.printStackTrace();
                 return false;
             }
 

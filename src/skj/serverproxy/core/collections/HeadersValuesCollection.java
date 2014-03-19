@@ -36,4 +36,8 @@ public class HeadersValuesCollection {
     public Set<String> keys() {
         return this.headers.keySet();
     }
+
+    public void removeKey(String key) {
+        this.headers.remove(key);
+    }
 }
