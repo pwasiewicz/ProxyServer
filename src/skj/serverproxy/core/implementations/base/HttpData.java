@@ -1,32 +1,31 @@
 package skj.serverproxy.core.implementations.base;
 
-import skj.serverproxy.core.collections.HeadersValuesCollection;
-
 import java.io.InputStream;
+import java.util.Properties;
 
 /**
  * Created by pwasiewicz on 18.03.14.
  */
 public class HttpData {
 
-    private HeadersValuesCollection headers;
+    private Properties header;
 
     private InputStream body;
 
     private String contract;
 
-    public HttpData(String contract, HeadersValuesCollection headers, InputStream body) {
-        this.headers = headers;
+    public HttpData(String contract, Properties header, InputStream body) {
+        this.header = header;
         this.contract = contract;
         this.body = body;
     }
 
-    public HeadersValuesCollection getHeaders() {
-        return this.headers;
+    public Properties getHeaders() {
+        return this.header;
     }
 
-    public void setHeaders(HeadersValuesCollection headers) {
-        this.headers = headers;
+    public void setHeaders(Properties headers) {
+        this.header = headers;
     }
 
     public InputStream getBody() {

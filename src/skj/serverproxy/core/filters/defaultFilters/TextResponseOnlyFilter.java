@@ -1,7 +1,6 @@
 package skj.serverproxy.core.filters.defaultFilters;
 
 import skj.serverproxy.core.AbstractResponseFilter;
-import skj.serverproxy.core.collections.HeadersValuesCollection;
 import skj.serverproxy.core.implementations.base.HttpData;
 
 import java.io.IOException;
@@ -32,16 +31,16 @@ public class TextResponseOnlyFilter extends AbstractResponseFilter {
     @Override
     public void filterRequest(HttpData httpData) {
 
-        if (this.isAcceptedContentType(httpData.getHeaders())) {
+      /*  if (this.isAcceptedContentType(httpData.getHeaders())) {
             return;
         }
 
         this.clearBody(httpData.getBody());
         
-        this.makeServiceUnavailable(httpData);
+        this.makeServiceUnavailable(httpData); */
     }
 
-    private void makeServiceUnavailable(HttpData httpData) {
+    /* private void makeServiceUnavailable(HttpData httpData) {
         httpData.setContract("HTTP/1.1 503 Service Temporarily Unavailable");
         httpData.setHeaders(new HeadersValuesCollection());
         httpData.setBody(new InputStream() {
@@ -50,7 +49,7 @@ public class TextResponseOnlyFilter extends AbstractResponseFilter {
                 return -1;
             }
         });
-    }
+    } */
 
     private void clearBody(InputStream bodyRequest) {
         try {
@@ -66,7 +65,7 @@ public class TextResponseOnlyFilter extends AbstractResponseFilter {
         return 1;
     }
 
-    private boolean isAcceptedContentType(HeadersValuesCollection header) {
+    /* private boolean isAcceptedContentType(HeadersValuesCollection header) {
          final String contentTypeKey = "content-type";
 
         if (!header.containsKey(contentTypeKey)) {
@@ -88,5 +87,5 @@ public class TextResponseOnlyFilter extends AbstractResponseFilter {
         }
 
         return false;
-    }
+    } */
 }
