@@ -30,8 +30,6 @@ public class ServerProxy {
              configuration.registerResponseFilter(new TextResponseOnlyFilter());
         }
 
-        configuration.registerResponseFilter(new ConnectionCloseFilter());
-
         IServerProxyCore server = configuration.start();
 
         System.out.println("Server started. Press any key to exit.");

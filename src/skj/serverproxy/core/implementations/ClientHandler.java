@@ -12,9 +12,7 @@ import skj.serverproxy.core.logger.NullLogger;
 
 import java.io.*;
 import java.net.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Logger;
 
 /**
@@ -52,7 +50,7 @@ public class ClientHandler implements ISocketHandler {
             return;
         }
 
-        this.writeInfo(String.format("Parsed client request. Target: %s/%s", proxyRequest.getHost(), proxyRequest.getPath()));
+        this.writeInfo(String.format("Parsed client request. Target: %s", proxyRequest.getHost()));
 
 
         try {
@@ -166,17 +164,19 @@ public class ClientHandler implements ISocketHandler {
                 return false;
             }
 
-            String bufferLine;
-
             try {
-                while ((bufferLine = InputStreamHelper.readLine(this.inputStream)) != null) {
+                this.contractLine = InputStreamHelper.readLine(this.inputStream);
 
-                    if (bufferLine.length() == 0) {
-                        break;
-                    }
-
-                    this.rawHeaders.add(bufferLine);
+                this.header = new Properties();
+                String line = InputStreamHelper.readLine(this.inputStream);
+                while (line.trim().length() > 0) {
+                    int p = line.indexOf(':');
+                    header.put(line.substring(0, p).trim().toLowerCase(), line.substring(p + 1).trim());
+                    line = InputStreamHelper.readLine(this.inputStream);
                 }
+
+                return true;
+
             } catch (IOException e) {
                 e.printStackTrace();
                 return false;
@@ -184,16 +184,10 @@ public class ClientHandler implements ISocketHandler {
                 e.printStackTrace();
                 return false;
             }
-
-            return true;
         }
     }
 
     private class ProxyRequestHelper extends RequestProxyBase {
-
-        private String host;
-
-        private String path;
 
         public ProxyRequestHelper(InputStream inputStream, List<AbstractRequestFilter> filters) {
             super(inputStream, filters);
@@ -207,25 +201,17 @@ public class ClientHandler implements ISocketHandler {
             }
 
             try{
-                String contractLine = InputStreamHelper.readLine(this.inputStream);
+                this.contractLine = InputStreamHelper.readLine(this.inputStream);
                 if (contractLine.length() == 0) {
                     return false;
                 }
 
-                contractLine = this.handleContractLine(contractLine);
-                if (contractLine == null) {
-                    return false;
-                }
-
-                this.rawHeaders.add(contractLine);
-
-                String bufferLine;
-                while ((bufferLine = InputStreamHelper.readLine(this.inputStream)) != null) {
-                    if (bufferLine.length() == 0) {
-                        break;
-                    }
-
-                    this.rawHeaders.add(bufferLine);
+                this.header = new Properties();
+                String line = InputStreamHelper.readLine(this.inputStream);
+                while (line.trim().length() > 0) {
+                    int p = line.indexOf(':');
+                    header.put(line.substring(0, p).trim().toLowerCase(), line.substring(p + 1).trim());
+                    line = InputStreamHelper.readLine(this.inputStream);
                 }
 
                 return true;
@@ -241,26 +227,7 @@ public class ClientHandler implements ISocketHandler {
         }
 
         public String getHost(){
-            return this.host;
-        }
-
-        public String getPath() { return this.path; }
-
-        private String handleContractLine(String contractLine) {
-
-            String[] tokens = contractLine.split(" ");
-
-            if (tokens.length != 3) {
-                return null;
-            }
-
-            URI uri = URI.create(tokens[1]);
-            this.host = uri.getHost();
-
-            String path = uri.getPath();
-            this.path = path;
-
-            return tokens[0] + " " + path + " " + tokens[2];
+            return this.header.getProperty("host");
         }
     }
 }
