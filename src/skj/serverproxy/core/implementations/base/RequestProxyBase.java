@@ -1,5 +1,6 @@
 package skj.serverproxy.core.implementations.base;
 
+import com.sun.xml.internal.ws.api.model.Parameter;
 import skj.serverproxy.core.exceptions.InvalidHeaderException;
 import skj.serverproxy.core.filters.AbstractFilter;
 
@@ -66,6 +67,7 @@ public abstract class RequestProxyBase {
             filter.filterRequest(httpData);
         }
 
+        this.overrideHeader(httpData.getContract(), httpData.getHeaders());
         this.overrideInputStream(httpData.getBody());
     }
 
@@ -73,6 +75,10 @@ public abstract class RequestProxyBase {
         this.inputStream = stream;
     }
 
+    protected final void overrideHeader(String contractLine, Properties header) {
+        this.contractLine = contractLine;
+        this.header = header;
+    }
 
     protected boolean writeBody(OutputStream os) {
 
