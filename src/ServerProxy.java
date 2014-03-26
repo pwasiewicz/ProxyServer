@@ -1,10 +1,10 @@
+import org.kohsuke.args4j.CmdLineException;
+import org.kohsuke.args4j.CmdLineParser;
+import org.kohsuke.args4j.Option;
 import skj.serverproxy.core.DefaultServerProxyShell;
 import skj.serverproxy.core.IServerProxyConfiguration;
 import skj.serverproxy.core.IServerProxyCore;
-import skj.serverproxy.core.arguments.ArgumentResolver;
-import skj.serverproxy.core.arguments.exceptions.MissingArgumentException;
 import skj.serverproxy.core.filters.defaultFilters.TextResponseOnlyFilter;
-import skj.serverproxy.core.models.ServerMode;
 
 import java.io.IOException;
 
@@ -14,25 +14,50 @@ import java.io.IOException;
  */
 public class ServerProxy {
 
-    public static void main(String... args) throws MissingArgumentException, IOException {
+    @Option(name = "-p", usage = "port on which proxy server will be running.", required = true)
+    private int port;
 
+    @Option(name = "-l")
+    private boolean lightMode;
+
+    public static void main(String... args)  {
+        new ServerProxy().doMain(args);
+    }
+
+    public void doMain(String... args) {
         System.out.println("Starting server...");
 
-        ArgumentResolver argsResolver = new ArgumentResolver();
-        argsResolver.resolve(args);
+        CmdLineParser cmdParser = new CmdLineParser(this);
+
+        try {
+            cmdParser.parseArgument(args);
+        } catch (CmdLineException e) {
+            e.printStackTrace();
+
+            System.out.println("Cannot resolve arguments.");
+            cmdParser.printUsage(System.out);
+
+            return;
+        }
+
 
         IServerProxyConfiguration configuration = DefaultServerProxyShell
-                                        .initialize()
-                                        .onPort(argsResolver.getPort());
+                .initialize()
+                .onPort(this.port);
 
-        if (argsResolver.getMode() == ServerMode.LIGHT) {
-             configuration.registerResponseFilter(new TextResponseOnlyFilter());
+        if (this.lightMode) {
+            configuration.registerResponseFilter(new TextResponseOnlyFilter());
         }
 
         IServerProxyCore server = configuration.start();
 
         System.out.println("Server started. Press any key to exit.");
-        System.in.read();
+        try {
+            System.in.read();
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Error while waiting for user input.");
+        }
 
         server.stop();
     }
