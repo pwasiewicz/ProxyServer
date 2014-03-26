@@ -1,12 +1,15 @@
 package skj.serverproxy.core.filters.defaultFilters;
 
 import skj.serverproxy.core.AbstractResponseFilter;
+import skj.serverproxy.core.helpers.InputStreamHelper;
 import skj.serverproxy.core.implementations.base.HttpData;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Properties;
 
 /**
  * Created by pwasiewicz on 18.03.14.
@@ -31,14 +34,22 @@ public class TextResponseOnlyFilter extends AbstractResponseFilter {
     @Override
     public void filterRequest(HttpData httpData) {
 
-      /*  if (this.isAcceptedContentType(httpData.getHeaders())) {
-            return;
-        }
+         Properties headers = httpData.getHeaders();
+        String contract = httpData.getContract();
 
-        this.clearBody(httpData.getBody());
-        
-        this.makeServiceUnavailable(httpData); */
+         if (this.isAcceptedContentType(headers, contract)) {
+             return;
+         }
+
+        try {
+            this.forbiddenResponse(httpData, "Server settings do not allow to send content.");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
     }
+
+
+
 
     /* private void makeServiceUnavailable(HttpData httpData) {
         httpData.setContract("HTTP/1.1 503 Service Temporarily Unavailable");
@@ -51,28 +62,24 @@ public class TextResponseOnlyFilter extends AbstractResponseFilter {
         });
     } */
 
-    private void clearBody(InputStream bodyRequest) {
-        try {
-            bodyRequest.close();
-        } catch (IOException e) {
-            // clear and forget
-        }
-    }
-
 
     @Override
     public float getPriority() {
         return 1;
     }
 
-    /* private boolean isAcceptedContentType(HeadersValuesCollection header) {
+     private boolean isAcceptedContentType(Properties header, String contract) {
          final String contentTypeKey = "content-type";
+
+         if (contract.indexOf("OK") < 0) {
+             return true;
+         }
 
         if (!header.containsKey(contentTypeKey)) {
             return false;
         }
 
-        String value = header.getValues(contentTypeKey).get(0);
+        String value = header.getProperty(contentTypeKey);
         String[] values = value.split(";");
 
         for (String chunk: values) {
@@ -87,5 +94,5 @@ public class TextResponseOnlyFilter extends AbstractResponseFilter {
         }
 
         return false;
-    } */
+    }
 }

@@ -48,8 +48,7 @@ public abstract class RequestProxyBase {
             return 0;
         }
 
-        String value = this.header.getProperty("content-length");
-        return Long.parseLong(value);
+        return Long.parseLong(this.header.get("content-length").toString().trim());
     }
 
     public final void applyFilters() throws InvalidHeaderException {

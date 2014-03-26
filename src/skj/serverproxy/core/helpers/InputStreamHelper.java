@@ -29,6 +29,7 @@ public class InputStreamHelper {
                 throw new InvalidHeaderException();
             }
 
+
             sb.append((char) ch);
             ch = stream.read();
         }
