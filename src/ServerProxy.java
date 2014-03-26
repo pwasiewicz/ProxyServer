@@ -5,7 +5,9 @@ import skj.serverproxy.core.DefaultServerProxyShell;
 import skj.serverproxy.core.IServerProxyConfiguration;
 import skj.serverproxy.core.IServerProxyCore;
 import skj.serverproxy.core.filters.defaultFilters.TextResponseOnlyFilter;
+import skj.serverproxy.core.filters.defaultFilters.WordMarkerFilter;
 
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -14,11 +16,14 @@ import java.io.IOException;
  */
 public class ServerProxy {
 
-    @Option(name = "-p", usage = "port on which proxy server will be running.", required = true)
+    @Option(name = "-p", aliases = { "--port" }, usage = "port on which proxy server will be running.", required = true)
     private int port;
 
-    @Option(name = "-l")
+    @Option(name = "-l", aliases = { "--light" })
     private boolean lightMode;
+
+    @Option(name = "-mw", aliases = { "--markword" }, usage = "path to file that holds words for mark in response.", required = false)
+    private File wordMarkerFile = null;
 
     public static void main(String... args)  {
         new ServerProxy().doMain(args);
@@ -49,9 +54,14 @@ public class ServerProxy {
             configuration.registerResponseFilter(new TextResponseOnlyFilter());
         }
 
+        if (this.wordMarkerFile != null) {
+            configuration.registerResponseFilter(new WordMarkerFilter(this.wordMarkerFile));
+        }
+
         IServerProxyCore server = configuration.start();
 
         System.out.println("Server started. Press any key to exit.");
+
         try {
             System.in.read();
         } catch (IOException e) {

@@ -2,13 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7971d3dd-f9f4-4557-a19c-92c7b31ada90" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/lib/args4j-2.0.21.jar" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/skj/serverproxy/core/filters/defaultFilters/WordMarkerFilter.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/skj/serverproxy/core/arguments/ArgumentResolver.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/skj/serverproxy/core/arguments/IArgumentResolver.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/skj/serverproxy/core/arguments/exceptions/MissingArgumentException.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/skj/serverproxy/core/models/ServerMode.java" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/ServerProxy.java" afterPath="$PROJECT_DIR$/src/ServerProxy.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/skj/serverproxy/core/filters/defaultFilters/WordMarkerFilter.java" afterPath="$PROJECT_DIR$/src/skj/serverproxy/core/filters/defaultFilters/WordMarkerFilter.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="SKJ_ServerProxy.iws" />
@@ -90,10 +85,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="WordMarkerFilter.java" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="WordMarkerFilter.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/skj/serverproxy/core/filters/defaultFilters/WordMarkerFilter.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="8" column="29" selection-start="225" selection-end="241" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="450">
+            <state line="12" column="0" selection-start="348" selection-end="348" vertical-scroll-proportion="0.3570248" vertical-offset="0" max-vertical-offset="605">
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -110,10 +105,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ServerProxy.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="ServerProxy.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/ServerProxy.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="21" column="0" selection-start="649" selection-end="649" vertical-scroll-proportion="0.6227348" vertical-offset="0" max-vertical-offset="1260">
+            <state line="57" column="78" selection-start="1864" selection-end="1864" vertical-scroll-proportion="0.0" vertical-offset="545" max-vertical-offset="1440">
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -156,6 +151,12 @@
     </FindUsagesManager>
   </component>
   <component name="Git.Settings">
+    <option name="PREVIOUS_COMMIT_AUTHORS">
+      <list>
+        <option value="Small changes in arguments." />
+        <option value="pat.wasiewicz@gmail.com" />
+      </list>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="IdeDocumentHistory">
@@ -208,10 +209,10 @@
         <option value="$PROJECT_DIR$/src/skj/serverproxy/core/helpers/InputStreamHelper.java" />
         <option value="$PROJECT_DIR$/src/skj/serverproxy/core/implementations/base/RequestProxyBase.java" />
         <option value="$PROJECT_DIR$/src/skj/serverproxy/core/implementations/base/HttpConnectionProxyBase.java" />
-        <option value="$PROJECT_DIR$/src/skj/serverproxy/core/filters/defaultFilters/WordMarkerFilter.java" />
         <option value="$PROJECT_DIR$/src/skj/serverproxy/core/arguments/IArgumentResolver.java" />
         <option value="$PROJECT_DIR$/src/skj/serverproxy/core/arguments/ArgumentResolver.java" />
         <option value="$PROJECT_DIR$/src/ServerProxy.java" />
+        <option value="$PROJECT_DIR$/src/skj/serverproxy/core/filters/defaultFilters/WordMarkerFilter.java" />
       </list>
     </option>
   </component>
@@ -752,7 +753,11 @@
       <created>1395868653856</created>
       <updated>1395868653856</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="args4j for resolving arguments.">
+      <created>1395870475631</created>
+      <updated>1395870475631</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TodoView" selected-index="0">
@@ -789,14 +794,14 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.30638298" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2603834" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32978722" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32765958" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32765958" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32978722" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2603834" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32553193" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32553193" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3287234" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -817,7 +822,8 @@
       <TodoPanelSettings />
     </option>
     <MESSAGE value="Changes RequestProxyBase to HttpConnectionProxyBase." />
-    <option name="LAST_COMMIT_MESSAGE" value="Changes RequestProxyBase to HttpConnectionProxyBase." />
+    <MESSAGE value="args4j for resolving arguments." />
+    <option name="LAST_COMMIT_MESSAGE" value="args4j for resolving arguments." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1115,18 +1121,25 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/skj/serverproxy/core/filters/defaultFilters/WordMarkerFilter.java">
+    <entry file="jar://$PROJECT_DIR$/lib/args4j-2.0.21.jar!/org/kohsuke/args4j/Option.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="29" selection-start="225" selection-end="241" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="450">
+        <state line="8" column="18" selection-start="400" selection-end="400" vertical-scroll-proportion="0.21649484" vertical-offset="0" max-vertical-offset="582">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ServerProxy.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="57" column="78" selection-start="1864" selection-end="1864" vertical-scroll-proportion="0.0" vertical-offset="545" max-vertical-offset="1440">
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/ServerProxy.java">
+    <entry file="file://$PROJECT_DIR$/src/skj/serverproxy/core/filters/defaultFilters/WordMarkerFilter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="21" column="0" selection-start="649" selection-end="649" vertical-scroll-proportion="0.6227348" vertical-offset="0" max-vertical-offset="1260">
+        <state line="12" column="0" selection-start="348" selection-end="348" vertical-scroll-proportion="0.3570248" vertical-offset="0" max-vertical-offset="605">
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
