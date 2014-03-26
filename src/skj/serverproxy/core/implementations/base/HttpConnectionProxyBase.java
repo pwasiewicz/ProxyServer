@@ -1,6 +1,5 @@
 package skj.serverproxy.core.implementations.base;
 
-import com.sun.xml.internal.ws.api.model.Parameter;
 import skj.serverproxy.core.exceptions.InvalidHeaderException;
 import skj.serverproxy.core.filters.AbstractFilter;
 
@@ -8,7 +7,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
@@ -16,7 +14,7 @@ import java.util.Properties;
 /**
  * Created by pwasiewicz on 16.03.14.
  */
-public abstract class RequestProxyBase {
+public abstract class HttpConnectionProxyBase {
 
     // finals
     protected InputStream inputStream;
@@ -27,7 +25,7 @@ public abstract class RequestProxyBase {
 
     protected final List<? extends AbstractFilter> filters;
 
-    protected RequestProxyBase(InputStream inputStream, List<? extends AbstractFilter> filters) {
+    protected HttpConnectionProxyBase(InputStream inputStream, List<? extends AbstractFilter> filters) {
         this.inputStream = inputStream;
         this.filters = filters;
     }

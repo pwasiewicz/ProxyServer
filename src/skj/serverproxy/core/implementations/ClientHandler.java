@@ -7,7 +7,7 @@ import skj.serverproxy.core.ISocketHandler;
 import skj.serverproxy.core.exceptions.InvalidHeaderException;
 import skj.serverproxy.core.filters.comparators.FilterPriorityComparator;
 import skj.serverproxy.core.helpers.InputStreamHelper;
-import skj.serverproxy.core.implementations.base.RequestProxyBase;
+import skj.serverproxy.core.implementations.base.HttpConnectionProxyBase;
 import skj.serverproxy.core.logger.NullLogger;
 
 import java.io.*;
@@ -151,7 +151,7 @@ public class ClientHandler implements ISocketHandler {
         return String.format("Thread %d: %s", Thread.currentThread().getId(), msg);
     }
 
-    private class ProxyServerResponse extends RequestProxyBase {
+    private class ProxyServerResponse extends HttpConnectionProxyBase {
 
         public ProxyServerResponse(InputStream inputStream, List<AbstractResponseFilter> filters) {
             super(inputStream, filters);
@@ -187,7 +187,7 @@ public class ClientHandler implements ISocketHandler {
         }
     }
 
-    private class ProxyRequestHelper extends RequestProxyBase {
+    private class ProxyRequestHelper extends HttpConnectionProxyBase {
 
         public ProxyRequestHelper(InputStream inputStream, List<AbstractRequestFilter> filters) {
             super(inputStream, filters);
