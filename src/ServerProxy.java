@@ -17,10 +17,10 @@ import java.io.IOException;
 public class ServerProxy {
 
     @Option(name = "-p", aliases = { "--port" }, usage = "port on which proxy server will be running.", required = true)
-    private int port;
+    private int port = 13000;
 
-    @Option(name = "-l", aliases = { "--light" })
-    private boolean lightMode;
+    @Option(name = "-l", aliases = { "--light" }, required = false)
+    private boolean lightMode = false;
 
     @Option(name = "-mw", aliases = { "--markword" }, usage = "path to file that holds words for mark in response.", required = false)
     private File wordMarkerFile = null;
@@ -55,7 +55,12 @@ public class ServerProxy {
         }
 
         if (this.wordMarkerFile != null) {
-            configuration.registerResponseFilter(new WordMarkerFilter(this.wordMarkerFile));
+            try {
+                configuration.registerResponseFilter(new WordMarkerFilter(this.wordMarkerFile));
+            } catch (IOException e) {
+                e.printStackTrace();
+                System.out.println("Error while adding word marker filter: " + e.getMessage());
+            }
         }
 
         IServerProxyCore server = configuration.start();

@@ -1,7 +1,5 @@
 package skj.serverproxy.core;
 
-import skj.serverproxy.core.models.ServerMode;
-
 /**
  * Created by pwasiewicz on 16.03.14.
  */

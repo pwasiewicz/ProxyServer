@@ -49,20 +49,6 @@ public class TextResponseOnlyFilter extends AbstractResponseFilter {
     }
 
 
-
-
-    /* private void makeServiceUnavailable(HttpData httpData) {
-        httpData.setContract("HTTP/1.1 503 Service Temporarily Unavailable");
-        httpData.setHeaders(new HeadersValuesCollection());
-        httpData.setBody(new InputStream() {
-            @Override
-            public int read() throws IOException {
-                return -1;
-            }
-        });
-    } */
-
-
     @Override
     public float getPriority() {
         return 1;

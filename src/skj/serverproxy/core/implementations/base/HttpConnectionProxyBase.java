@@ -49,7 +49,7 @@ public abstract class HttpConnectionProxyBase {
         return Long.parseLong(this.header.get("content-length").toString().trim());
     }
 
-    public final void applyFilters() throws InvalidHeaderException {
+    public final void applyFilters() throws InvalidHeaderException, IOException {
 
         if (this.filters == null) {
             return;

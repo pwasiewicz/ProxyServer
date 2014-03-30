@@ -82,7 +82,7 @@ public class ClientHandler implements ISocketHandler {
             return;
         }
 
-        ProxyServerResponse proxyServerResponse = new ProxyServerResponse(serverReader, this.responseFilters);
+        ProxyServerResponseHelper proxyServerResponse = new ProxyServerResponseHelper(serverReader, this.responseFilters);
 
         this.writeInfo("Parsing server response.");
 
@@ -151,9 +151,9 @@ public class ClientHandler implements ISocketHandler {
         return String.format("Thread %d: %s", Thread.currentThread().getId(), msg);
     }
 
-    private class ProxyServerResponse extends HttpConnectionProxyBase {
+    private class ProxyServerResponseHelper extends HttpConnectionProxyBase {
 
-        public ProxyServerResponse(InputStream inputStream, List<AbstractResponseFilter> filters) {
+        public ProxyServerResponseHelper(InputStream inputStream, List<AbstractResponseFilter> filters) {
             super(inputStream, filters);
         }
 
