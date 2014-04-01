@@ -102,7 +102,7 @@ public class DefaultServerProxyCore implements IServerProxyCore {
                                 try{
                                     logger.info("Handling request in thread " + Thread.currentThread().getId());
                                     httpHandler.handle(clientSocket);
-                                    logger.info("Exiting client's thread.");
+                                    logger.info("Exiting client's thread " + Thread.currentThread().getId());
                                 } catch (IOException e) {
                                     logger.severe(String.format("Thread %d: Error while handling client's request: %s",
                                                                     Thread.currentThread().getId(),

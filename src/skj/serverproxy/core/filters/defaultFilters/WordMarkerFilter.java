@@ -1,6 +1,5 @@
 package skj.serverproxy.core.filters.defaultFilters;
 
-import com.sun.net.httpserver.Headers;
 import com.sun.xml.internal.messaging.saaj.util.ByteInputStream;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -9,8 +8,6 @@ import skj.serverproxy.core.helpers.InputStreamHelper;
 import skj.serverproxy.core.implementations.base.HttpData;
 
 import java.io.*;
-import java.nio.ByteBuffer;
-import java.nio.IntBuffer;
 import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.LinkedList;

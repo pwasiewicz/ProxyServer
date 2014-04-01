@@ -86,14 +86,12 @@ public abstract class HttpConnectionProxyBase {
         int buffer;
         long totalCount = 0;
         try {
-            while ((buffer = inputStream.read()) != -1) {
+            while ((buffer = inputStream.read()) != -1
+                    && totalCount < this.getContentLength()) {
 
                 totalCount += 1;
                 os.write(buffer);
-
-                if (totalCount % 1024 == 0){
-                    os.flush();
-                }
+                os.flush();
             }
             os.flush();
             return  true;

@@ -1,11 +1,8 @@
 package skj.serverproxy.core.filters.defaultFilters;
 
 import skj.serverproxy.core.AbstractResponseFilter;
-import skj.serverproxy.core.helpers.InputStreamHelper;
 import skj.serverproxy.core.implementations.base.HttpData;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.LinkedList;
 import java.util.List;
