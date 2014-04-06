@@ -1,0 +1,5 @@
+#!/bin/bash
+
+java -cp "out/artifacts/SKJ_ServerProxy_jar/SKJ_ServerProxy.jar" ServerProxy -p 10000
+
+exit 0

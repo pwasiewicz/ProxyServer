@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="/tests/"/>
+	<classpathentry kind="src" path="/tests/src"/>
+	<classpathentry kind="var" path="APPLICATION_HOME_DIR/lib/junit-4.10.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/SKJ_ServerProxy"/>
+	<classpathentry kind="output" path="/out/production/tests"/>
+</classpath>
