@@ -5,9 +5,7 @@ import skj.serverproxy.core.DefaultServerProxyShell;
 import skj.serverproxy.core.IServerProxyConfiguration;
 import skj.serverproxy.core.IServerProxyCore;
 import skj.serverproxy.core.filters.defaultFilters.TextResponseOnlyFilter;
-import skj.serverproxy.core.filters.defaultFilters.WordMarkerFilter;
 
-import java.io.File;
 import java.io.IOException;
 
 /**
@@ -21,9 +19,6 @@ public class ServerProxy {
 
     @Option(name = "-l", aliases = { "--light" }, required = false)
     private boolean lightMode = false;
-
-    @Option(name = "-mw", aliases = { "--markword" }, usage = "path to file that holds words for mark in response.", required = false)
-    private File wordMarkerFile = null;
 
     public static void main(String... args)  {
         new ServerProxy().doMain(args);
@@ -52,15 +47,6 @@ public class ServerProxy {
 
         if (this.lightMode) {
             configuration.registerResponseFilter(new TextResponseOnlyFilter());
-        }
-
-        if (this.wordMarkerFile != null) {
-            try {
-                configuration.registerResponseFilter(new WordMarkerFilter(this.wordMarkerFile));
-            } catch (IOException e) {
-                e.printStackTrace();
-                System.out.println("Error while adding word marker filter: " + e.getMessage());
-            }
         }
 
         IServerProxyCore server = configuration.start();

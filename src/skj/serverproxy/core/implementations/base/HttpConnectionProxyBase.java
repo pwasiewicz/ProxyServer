@@ -7,14 +7,18 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * Created by pwasiewicz on 16.03.14.
  */
 public abstract class HttpConnectionProxyBase {
+
+    private final String contentLengthKey = "content-length";
+
+    private final String transferEncodingKey = "transfer-encoding";
+
+    private final String chunkedKey = "chunked";
 
     // finals
     protected InputStream inputStream;
@@ -42,11 +46,27 @@ public abstract class HttpConnectionProxyBase {
 
     public long getContentLength () {
 
-        if (!this.header.containsKey("content-length")) {
+        if (!this.header.containsKey(contentLengthKey)) {
             return 0;
         }
 
-        return Long.parseLong(this.header.get("content-length").toString().trim());
+        return Long.parseLong(this.header.get(contentLengthKey).toString().trim());
+    }
+
+    public boolean isChunkedEncoding() {
+        if (!this.header.containsKey(transferEncodingKey)) {
+            return false;
+        }
+
+        String value = this.header.getProperty(transferEncodingKey).trim();
+
+        for (String val: this.splitHeaderValue(value)) {
+            if (val.trim().toLowerCase().equals(chunkedKey)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public final void applyFilters() throws InvalidHeaderException, IOException {
@@ -77,17 +97,28 @@ public abstract class HttpConnectionProxyBase {
         this.header = header;
     }
 
+    protected String[] splitHeaderValue(String value) {
+        if (value == null) {
+            return null;
+        }
+
+        return value.split(":");
+    }
+
     protected boolean writeBody(OutputStream os) {
 
-        if (this.getContentLength() == 0) {
+        if (this.getContentLength() == 0 && !this.isChunkedEncoding()) {
             return true;
         }
 
         int buffer;
         long totalCount = 0;
+        boolean chunked = isChunkedEncoding();
+
         try {
             while ((buffer = inputStream.read()) != -1
-                    && totalCount < this.getContentLength()) {
+                    && (chunked
+                            || totalCount < this.getContentLength())) {
 
                 totalCount += 1;
                 os.write(buffer);
