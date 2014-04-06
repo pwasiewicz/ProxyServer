@@ -45,7 +45,6 @@ public class ClientHandler implements ISocketHandler {
         ProxyRequestHelper proxyRequest = new ProxyRequestHelper(clientInput, this.requestFilters);
         if (!proxyRequest.parseHeaders()) {
             this.logger.severe(this.attachThreadId("Unable to parse client request."));
-            // TODO: write bad request
 
             this.internalServerError(clientWriter, clientInput, null, null);
             return;
