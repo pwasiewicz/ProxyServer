@@ -22,6 +22,8 @@ public class ClientHandler implements ISocketHandler {
 
     private static final int serverPort = 80;
 
+    private static final String internalServerErrorHeaderContract = "HTTP/1.1 500 Internal Server Error";
+
     public Logger logger;
 
     private List<AbstractResponseFilter> responseFilters;
@@ -45,8 +47,7 @@ public class ClientHandler implements ISocketHandler {
             this.logger.severe(this.attachThreadId("Unable to parse client request."));
             // TODO: write bad request
 
-            clientInput.close();
-            clientWriter.close();
+            this.internalServerError(clientWriter, clientInput, null, null);
             return;
         }
 
@@ -57,12 +58,8 @@ public class ClientHandler implements ISocketHandler {
             proxyRequest.applyFilters();
         } catch (InvalidHeaderException e) {
             logger.severe(this.attachThreadId("Error while applying filters for request: " + e.getMessage()));
-            e.printStackTrace();
-            // TODO: internal server error
 
-            clientInput.close();
-            clientWriter.close();
-
+            this.internalServerError(clientWriter, clientInput, null, null);
             return;
         }
 
@@ -74,11 +71,7 @@ public class ClientHandler implements ISocketHandler {
         if (!proxyRequest.proxyTo(serverWriter)) {
             this.logger.severe(this.attachThreadId("Unable to send request to target server."));
 
-            clientInput.close();
-            clientWriter.close();
-            serverReader.close();
-            serverWriter.close();
-
+            this.internalServerError(clientWriter, clientInput, serverWriter, serverReader);
             return;
         }
 
@@ -89,11 +82,7 @@ public class ClientHandler implements ISocketHandler {
         if (!proxyServerResponse.parseHeaders()) {
             this.logger.severe(this.attachThreadId("Unable to parse server response."));
 
-            clientInput.close();
-            clientWriter.close();
-            serverReader.close();
-            serverWriter.close();
-
+            this.internalServerError(clientWriter, clientInput, serverWriter, serverReader);
             return;
         }
 
@@ -103,7 +92,7 @@ public class ClientHandler implements ISocketHandler {
             this.logger.severe(this.attachThreadId("Error while applying filters to server response: " + e.getMessage()));
             e.printStackTrace();
 
-            // TODO internal server error
+            this.internalServerError(clientWriter, clientInput, serverWriter, serverReader);
             return;
         }
 
@@ -151,6 +140,31 @@ public class ClientHandler implements ISocketHandler {
         return String.format("Thread %d: %s", Thread.currentThread().getId(), msg);
     }
 
+    private void internalServerError(OutputStream stream, InputStream clientInput, OutputStream serverWriter, InputStream serverReader) {
+
+        PrintWriter writer = new PrintWriter(stream);
+        writer.write(internalServerErrorHeaderContract);
+        writer.write("\n");
+        writer.close();
+
+        try {
+            if (clientInput != null) {
+                clientInput.close();
+            }
+
+            if (serverWriter != null) {
+                serverWriter.close();
+            }
+
+            if (serverReader != null) {
+                serverReader.close();
+            }
+        }
+        catch (IOException e) {
+            this.logger.warning("Unable to close one of streams while sending internal server error. Details: " + e.getMessage());
+        }
+    }
+
     private class ProxyServerResponseHelper extends HttpConnectionProxyBase {
 
         public ProxyServerResponseHelper(InputStream inputStream, List<AbstractResponseFilter> filters) {
@@ -166,7 +180,9 @@ public class ClientHandler implements ISocketHandler {
 
             try {
                 this.contractLine = InputStreamHelper.readLine(this.inputStream);
-
+                if (contractLine == null || contractLine.length() == 0) {
+                    return false;
+                }
                 this.header = new Properties();
                 String line = InputStreamHelper.readLine(this.inputStream);
                 while (line.trim().length() > 0) {
@@ -202,7 +218,7 @@ public class ClientHandler implements ISocketHandler {
 
             try{
                 this.contractLine = InputStreamHelper.readLine(this.inputStream);
-                if (contractLine.length() == 0) {
+                if (contractLine == null || contractLine.length() == 0) {
                     return false;
                 }
 

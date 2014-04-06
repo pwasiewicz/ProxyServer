@@ -28,6 +28,11 @@ public class InputStreamHelper {
         StringBuffer sb = new StringBuffer("");
 
         ch = stream.read();
+
+        if (ch == -1) {
+            return null;
+        }
+
         while(ch != CR && ch != LF)
         {
             if (sb.length() >= MAX_HEADER_LENGTH) {
