@@ -1,7 +1,8 @@
-Program zaliczeniowy z SKJ
-Wersja 1.0
+Simple java proxy server written for academic purposes - parses raw http requests and rewrites it. Not for daily use!
 
-Autor: Patryk Wąsiewicz, S11671
+English readme translation - maybe soon.
+
+========================================
 
 1. OPIS URUCHOMIENIA
 Program uruchamiamy skryptem "run.sh", który odpala odpowiedniego JAR'a z
